@@ -22,7 +22,9 @@ public class PinkMan : MonoBehaviour
     int terrainLayer;
     // Default character facing direction
     bool faceRight = true;
-    
+   
+    bool enableAirJump = false;
+
     // Jump force
     [SerializeField]
     protected float jumpForce = 100f;
@@ -75,9 +77,13 @@ public class PinkMan : MonoBehaviour
             {
                 rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Force);   
                 grounded = false;
-                
+                enableAirJump = true;
             }
-            
+           else if (enableAirJump)
+           {
+              rb.AddForce(Vector2.up * 200, ForceMode2D.Force);
+              enableAirJump = false;
+           } 
         }
 
         // Restart level
@@ -136,11 +142,7 @@ public class PinkMan : MonoBehaviour
             anim.SetBool("run", false);
             runCounter = 0;
         }
-
-
     }
-
-
 
     // OnCollisionEnter2D is called when this collider2D/rigidbody2D has begun touching another rigidbody2D/collider2D (2D physics only)
     // Prevent air jump
@@ -194,7 +196,6 @@ public class PinkMan : MonoBehaviour
     {
         Debug.Log("OnCollisionExit2D: " + collision.gameObject.name);
     }
-
 
     private void RestartLevel()
     {
