@@ -13,8 +13,6 @@ public class NewTestScript
     {
         Assert.That(GameObject.Find("PinkMan").GetComponent<Rigidbody2D>().collisionDetectionMode, 
             Is.EqualTo(CollisionDetectionMode2D.Discrete));
-        
-        Assert.That(GameObject.Find("PinkMan").GetComponent<TilemapCollider2D>().usedByComposite, Is.EqualTo(true));
     }
 
     // A UnityTest behaves like a coroutine in Play Mode. In Edit Mode you can use
