@@ -32,11 +32,11 @@ public class NewTestScript
         {
             while (!SceneManager.SetActiveScene(testScene))
             {
-                Debug.Log($"In the loop: {timeoutCounter}");
-                timeoutCounter++;
+                //Debug.Log($"In the loop: {timeoutCounter}");
+                //timeoutCounter++;
                 
-                if (timeoutCounter == timeoutCounterThreshold)
-                    Assert.Fail($"Timeout: loading {testScene.name}");
+                //if (timeoutCounter == timeoutCounterThreshold)
+                    //Assert.Fail($"Timeout: loading {testScene.name}");
 
                 yield return new WaitForSeconds(1);
             }

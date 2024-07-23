@@ -7,7 +7,7 @@ public class PinkMan : MonoBehaviour
 {
     Rigidbody2D rb;
     Animator anim;
-
+    
     [SerializeField]
     protected float walkSpeed = 100f; // 100 meters
 
@@ -62,7 +62,7 @@ public class PinkMan : MonoBehaviour
         anim = GetComponent<Animator>();
 
         // Load lives from PlayerPrefs, default lives to 3 if the entry does not exist
-        Lives = PlayerPrefs.GetInt("Lives",3);
+        //Lives = PlayerPrefs.GetInt("Lives",3);
     }
 
     // Update is called once per frame

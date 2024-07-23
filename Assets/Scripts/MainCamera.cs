@@ -70,7 +70,7 @@ public class MainCamera : MonoBehaviour
 
 
 
-        Debug.Log(xOffset);
+        //Debug.Log(xOffset);
     }
 
 }
