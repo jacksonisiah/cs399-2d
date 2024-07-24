@@ -3,13 +3,13 @@ using UnityEngine.UI;
 
 public class UI : MonoBehaviour
 {
+    private Text _fruit;
     // Start is called before the first frame update
 
     private Text _lives;
-    private Text _fruit;
     private PinkMan _player;
-    
-    void Start()
+
+    private void Start()
     {
         _fruit = GameObject.Find("Items_Text").GetComponent<Text>();
         _lives = GameObject.Find("Lives_Text").GetComponent<Text>();
@@ -17,7 +17,7 @@ public class UI : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         _lives.text = $"x{_player.Lives.ToString()}";
         _lives.color = _player.Lives <= 1 ? Color.red : Color.white;

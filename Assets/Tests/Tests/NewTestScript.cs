@@ -1,9 +1,7 @@
 using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.TestTools;
-using UnityEngine.Tilemaps;
 
 public class NewTestScript
 {
@@ -11,7 +9,7 @@ public class NewTestScript
     [Test]
     public void NewTestScriptSimplePasses()
     {
-        Assert.That(GameObject.Find("PinkMan").GetComponent<Rigidbody2D>().collisionDetectionMode, 
+        Assert.That(GameObject.Find("PinkMan").GetComponent<Rigidbody2D>().collisionDetectionMode,
             Is.EqualTo(CollisionDetectionMode2D.Discrete));
     }
 

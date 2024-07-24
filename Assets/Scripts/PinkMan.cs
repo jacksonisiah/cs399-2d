@@ -1,146 +1,150 @@
-using System.Collections;
-using System.Collections.Generic;
+using System;
 using UnityEngine;
 using UnityEngine.SceneManagement;
 
 public class PinkMan : MonoBehaviour
 {
-    Rigidbody2D rb;
-    Animator anim;
-    
-    [SerializeField]
-    protected float walkSpeed = 100f; // 100 meters
-
-    protected float runSpeed;
-    // Boolean varible to check if the character is on the ground
-    bool grounded = false;
-    // Boolean varible to check if the character is running
-    bool run = false;
-    // A counter used to trigger running
-    int runCounter = 0;
-    // The integer value for the Terrain layer
-    int terrainLayer;
-    // Default character facing direction
-    bool faceRight = true;
-   
-    bool enableAirJump = false;
+    [SerializeField] protected float walkSpeed = 100f; // 100 meters
 
     // Jump force
-    [SerializeField]
-    protected float jumpForce = 100f;
-    // Spike tag
-    string SpikeTag = "Spikes";
+    [SerializeField] protected float jumpForce = 100f;
+
+    private Animator _anim;
 
     // Apple tag
-    string AppleTag = "Apple";
+    private readonly string _appleTag = "Apple";
 
-    public int ItemsCount
-    {
-        get;
-        set;
-    } = 0;
+    private bool _enableAirJump;
+
+    // Default character facing direction
+    private bool _faceRight = true;
+
+    // Boolean varible to check if the character is on the ground
+    private bool _grounded;
+
+    private Rigidbody2D _rb;
+
+    // Boolean varible to check if the character is running
+    private bool _run;
+
+    // A counter used to trigger running
+    private int _runCounter;
+
+    private GameObject _scoreboard;
+
+    // Spike tag
+    private readonly string _spikeTag = "Spikes";
+
+    // The integer value for the Terrain layer
+    private int _terrainLayer;
+
+    protected float RunSpeed;
+
+    public int ItemsCount { get; set; }
 
     // Number of character lives, default to 3 
-    public int Lives
-    {
-        get;
-        set;
-    } = 3;
+    public int Lives { get; set; } = 3;
+
+    public int LivesLost { get; set; }
+
     //
     private void Awake()
     {
         Application.targetFrameRate = -1;
-        terrainLayer = LayerMask.NameToLayer("Terrain");
+        _terrainLayer = LayerMask.NameToLayer("Terrain");
     }
 
     // Start is called before the first frame update
-    void Start()
+    private void Start()
     {
-        runSpeed = 3 * walkSpeed;
+        RunSpeed = 3 * walkSpeed;
         // Get references in the scene
-        rb = GetComponent<Rigidbody2D>();
-        anim = GetComponent<Animator>();
-
+        _rb = GetComponent<Rigidbody2D>();
+        _anim = GetComponent<Animator>();
+        _scoreboard = GameObject.Find("Scoreboard");
+        _scoreboard.SendMessage("Toggle");
         // Load lives from PlayerPrefs, default lives to 3 if the entry does not exist
-        //Lives = PlayerPrefs.GetInt("Lives",3);
+        Lives = PlayerPrefs.GetInt("Lives",3);
+        Lives = 3;
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         // Handles both keyboard and joystick
-        bool jump = Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump");
-        
+        var jump = Input.GetKeyDown(KeyCode.Space) || Input.GetButtonDown("Jump");
+
         if (jump)
         {
-            if (grounded)
+            if (_grounded)
             {
-                rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Force);   
-                grounded = false;
-                enableAirJump = true;
+                _rb.AddForce(Vector2.up * jumpForce, ForceMode2D.Force);
+                _grounded = false;
+                _enableAirJump = true;
             }
-           else if (enableAirJump)
-           {
-              rb.AddForce(Vector2.up * 200, ForceMode2D.Force);
-              enableAirJump = false;
-           } 
+            else if (_enableAirJump)
+            {
+                _rb.AddForce(Vector2.up * 200, ForceMode2D.Force);
+                _enableAirJump = false;
+            }
         }
 
         // Restart level
         if (Lives == 0)
-            RestartLevel();
-        
+        {
+            RestartLevel(); 
+        }
     }
 
     // This function is called every fixed framerate frame, if the MonoBehaviour is enabled
     private void FixedUpdate()
     {
         // Move horizontally
-        float hMove = Input.GetAxis("Horizontal");
-        float speed = walkSpeed;
-        if (run)
-            speed = runSpeed;
+        var hMove = Input.GetAxis("Horizontal");
+        var speed = walkSpeed;
+        if (_run)
+            speed = RunSpeed;
 
         // Update character velocity
-        rb.velocity = new Vector2(hMove * speed * Time.deltaTime, rb.velocity.y);
+        _rb.velocity = new Vector2(hMove * speed * Time.deltaTime, _rb.velocity.y);
 
         /* Change character face direction*/
         // Face left
-        if (hMove < 0 && faceRight)
+        if (hMove < 0 && _faceRight)
         {
-            rb.transform.Rotate(0f, 180f, 0, Space.Self);
-            faceRight = false;
+            _rb.transform.Rotate(0f, 180f, 0, Space.Self);
+            _faceRight = false;
         }
 
         // Face right
-        if (hMove > 0 && !faceRight)
+        if (hMove > 0 && !_faceRight)
         {
-            rb.transform.Rotate(0f, 180f, 0, Space.Self);
-            faceRight = true;
-
+            _rb.transform.Rotate(0f, 180f, 0, Space.Self);
+            _faceRight = true;
         }
 
         // Set walk animation
         if (hMove == 0)
-            anim.SetBool("walk", false);
+            _anim.SetBool("walk", false);
         else
-            anim.SetBool("walk", true);
+            _anim.SetBool("walk", true);
 
         // Switch to run animation
-        if (System.Math.Abs(hMove) == 1)
+        if (Math.Abs(hMove) == 1)
         {
-            if (runCounter == 3)
+            if (_runCounter == 3)
             {
-                run = true;
-                anim.SetBool("run", true);
+                _run = true;
+                _anim.SetBool("run", true);
             }
-            runCounter++;
+
+            _runCounter++;
         }
         else
         {
-            run = false;
-            anim.SetBool("run", false);
-            runCounter = 0;
+            _run = false;
+            _anim.SetBool("run", false);
+            _runCounter = 0;
         }
     }
 
@@ -148,33 +152,30 @@ public class PinkMan : MonoBehaviour
     // Prevent air jump
     private void OnCollisionEnter2D(Collision2D collision)
     {
-        if (collision.gameObject.layer == terrainLayer)
+        if (collision.gameObject.layer == _terrainLayer)
         {
-            grounded = true;
+            _grounded = true;
             Debug.Log("OnCollisionEnter2D: " + collision.gameObject.layer);
         }
 
-        if (collision.gameObject.tag == SpikeTag)
+        if (collision.gameObject.tag == _spikeTag)
         {
             // Push the character to the opposite direction
-            if (faceRight)
-            {
-                rb.AddForce(Vector2.left * 5000);
-            }
+            if (_faceRight)
+                _rb.AddForce(Vector2.left * 5000);
             else
-            {
-                rb.AddForce(Vector2.right * 5000);
-            }
+                _rb.AddForce(Vector2.right * 5000);
 
             // Reduce player life by one
             Lives--;
+            LivesLost++;
 
             // Update player lives
             PlayerPrefs.SetInt("Lives", Lives);
         }
 
         // Update item count
-        if (collision.gameObject.tag == AppleTag)
+        if (collision.gameObject.tag == _appleTag)
         {
             ItemsCount++;
 
@@ -201,6 +202,6 @@ public class PinkMan : MonoBehaviour
     {
         // Load the current scene again
         SceneManager.LoadScene(SceneManager.GetActiveScene().name);
+        PlayerPrefs.SetInt("Lives", 3);
     }
-
 }
