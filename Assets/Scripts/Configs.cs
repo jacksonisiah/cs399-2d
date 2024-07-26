@@ -10,12 +10,12 @@ public class Configs : MonoBehaviour
     // Music volume
     public static float MusicVol { set; get; } = 1;
 
-    
+
     // bye
     public void Start()
     {
         if (!Debug.isDebugBuild)
-            Destroy(GameObject.Find("CoolDebugZazu").gameObject); 
+            Destroy(GameObject.Find("CoolDebugZazu").gameObject);
     }
 
     public static void __Debug_DestroyPlayerPrefs()

@@ -9,10 +9,13 @@ public class PinkMan : MonoBehaviour
     // Jump force
     [SerializeField] protected float jumpForce = 100f;
 
-    private Animator _anim;
-
     // Apple tag
     private readonly string _appleTag = "Apple";
+
+    // Spike tag
+    private readonly string _spikeTag = "Spikes";
+
+    private Animator _anim;
 
     private bool _enableAirJump;
 
@@ -31,9 +34,6 @@ public class PinkMan : MonoBehaviour
     private int _runCounter;
 
     private GameObject _scoreboard;
-
-    // Spike tag
-    private readonly string _spikeTag = "Spikes";
 
     // The integer value for the Terrain layer
     private int _terrainLayer;
@@ -61,11 +61,8 @@ public class PinkMan : MonoBehaviour
         // Get references in the scene
         _rb = GetComponent<Rigidbody2D>();
         _anim = GetComponent<Animator>();
-        _scoreboard = GameObject.Find("Scoreboard");
-        _scoreboard.SendMessage("Toggle");
         // Load lives from PlayerPrefs, default lives to 3 if the entry does not exist
-        Lives = PlayerPrefs.GetInt("Lives",3);
-        Lives = 3;
+        Lives = PlayerPrefs.GetInt("Lives", 3);
     }
 
     // Update is called once per frame
@@ -90,10 +87,7 @@ public class PinkMan : MonoBehaviour
         }
 
         // Restart level
-        if (Lives == 0)
-        {
-            RestartLevel(); 
-        }
+        if (Lives == 0) RestartLevel();
     }
 
     // This function is called every fixed framerate frame, if the MonoBehaviour is enabled

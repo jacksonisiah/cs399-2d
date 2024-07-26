@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using NUnit.Framework;
 using UnityEngine;
 using UnityEngine.SceneManagement;
@@ -31,24 +30,20 @@ public class NewTestScript
         if (testScene.IsValid() && testScene.IsValid())
         {
             while (!SceneManager.SetActiveScene(testScene))
-            {
                 //Debug.Log($"In the loop: {timeoutCounter}");
                 //timeoutCounter++;
-                
                 //if (timeoutCounter == timeoutCounterThreshold)
-                    //Assert.Fail($"Timeout: loading {testScene.name}");
-
+                //Assert.Fail($"Timeout: loading {testScene.name}");
                 yield return new WaitForSeconds(1);
-            }
-            
-            Assert.Pass($"{scene} is loaded"); 
+
+            Assert.Pass($"{scene} is loaded");
         }
         else
         {
             Assert.Fail($"{scene} does not exist. Existing scene is {SceneManager.GetActiveScene().name}");
         }
-        
-        
+
+
         // Use the Assert class to test conditions.
         // Use yield to skip a frame.
         yield return null;

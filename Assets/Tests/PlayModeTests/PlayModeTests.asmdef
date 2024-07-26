@@ -1,6 +1,6 @@
 {
-    "name": "PlayModeTests",
-    "optionalUnityReferences": [
-        "TestAssemblies"
-    ]
+  "name": "PlayModeTests",
+  "optionalUnityReferences": [
+    "TestAssemblies"
+  ]
 }
