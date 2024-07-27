@@ -7,6 +7,9 @@ TagManager:
   - Spikes
   - Apple
   - Scoreboard
+  - TitleScreenMenu
+  - TitleScreenSettings
+  - GameOver
   layers:
   - Default
   - TransparentFX

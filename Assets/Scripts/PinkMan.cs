@@ -9,6 +9,8 @@ public class PinkMan : MonoBehaviour
     // Jump force
     [SerializeField] protected float jumpForce = 100f;
 
+    [SerializeField] protected GameObject gameOverScreen;
+
     // Apple tag
     private readonly string _appleTag = "Apple";
 
@@ -63,6 +65,7 @@ public class PinkMan : MonoBehaviour
         _anim = GetComponent<Animator>();
         // Load lives from PlayerPrefs, default lives to 3 if the entry does not exist
         Lives = PlayerPrefs.GetInt("Lives", 3);
+        Time.timeScale = 1;
     }
 
     // Update is called once per frame
@@ -194,8 +197,7 @@ public class PinkMan : MonoBehaviour
 
     private void RestartLevel()
     {
-        // Load the current scene again
-        SceneManager.LoadScene(SceneManager.GetActiveScene().name);
-        PlayerPrefs.SetInt("Lives", 3);
+        gameOverScreen.SetActive(true);
+        Time.timeScale = 0;
     }
 }
